@@ -1,10 +1,16 @@
-
 import re
 import string
+import nltk
+
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 
+# Download required NLTK resources
+nltk.download('stopwords')
+nltk.download('wordnet')
+
 stop_words = set(stopwords.words('english'))
+
 lemmatizer = WordNetLemmatizer()
 
 def clean_text(text):
@@ -13,19 +19,28 @@ def clean_text(text):
 
     text = text.lower()
 
-    text = re.sub(r'http\S+|www\S+|https\S+', '', text)
+    # Remove URLs
+    text = re.sub(
+        r'http\\S+|www\\S+|https\\S+',
+        '',
+        text
+    )
 
+    # Remove HTML
     text = re.sub(r'<.*?>', '', text)
 
-    text = re.sub(r'\d+', '', text)
+    # Remove numbers
+    text = re.sub(r'\\d+', '', text)
 
+    # Remove punctuation
     text = text.translate(
         str.maketrans('', '', string.punctuation)
     )
 
+    # Remove extra spaces
     text = text.strip()
 
-    text = re.sub(r'\s+', ' ', text)
+    text = re.sub(r'\\s+', ' ', text)
 
     words = text.split()
 
